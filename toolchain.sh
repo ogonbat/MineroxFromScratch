@@ -78,7 +78,7 @@ function BUILD(){
     local filename=$( CHECKTAR $command_string )
 
     # untar into sources
-    if [-f $filename]; then
+    if [ -f $filename ]; then
         # the file exist so untar it
         UNTAR $LFS/sources/$filename $LFS/sources
         #get the only existent directory in source
