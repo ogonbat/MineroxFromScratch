@@ -16,39 +16,32 @@ error() {
   else
     echo "Error on or near line ${parent_lineno}; exiting with status ${code}"
   fi
+  rm -Rf /mnt/lfs
+  rm -Rf /tools
+
   exit "${code}"
 }
 trap 'error ${LINENO}' ERR
 
-#generate the folders
-mkdir /mnt/lfs
-export LFS=/mnt/lfs
-mkdir -v $LFS/sources
-chmod -v a+wt $LFS/sources
+function DOWNLOAD() {
+    # check if the base folder source exist
+    local temporary_folder=/tmp/mx_sources
+    if [ ! -d "$temporary_folder" ]; then
+        mkdir -v $temporary_folder
+    fi
+    #check if is empty
+    if [ "$(ls -A $temporary_folder)" ]; then
+        return 0
+    else
+        # download all the files
+        wget --input-file=wget-list --continue --directory-prefix="$temporary_folder"
+        cp "$temporary_folder"/* "$1"
+        pushd "$1"
+            md5sum -c md5sums
+        popd
+    fi
 
-#download the list of files
-wget --input-file=wget-list --continue --directory-prefix=$LFS/sources
-
-cp md5sums $LFS/sources
-
-#move to sources folder and do the check
-pushd $LFS/sources
-md5sum -c md5sums
-popd
-
-# set folder tools
-mkdir -v $LFS/tools
-ln -sv $LFS/tools /
-
-# set variables to export
-LC_ALL=POSIX
-LFS_TGT=$(uname -m)-lfs-linux-gnu
-PATH=/tools/bin:/bin:/usr/bin
-export LC_ALL LFS_TGT PATH
-
-#number of processors to use
-export MAKEFLAGS='-j 2'
-
+}
 function check_is_tar() {
     for entry in "$LFS"/sources/"$1"*
     do
@@ -69,20 +62,21 @@ function get_directory() {
 }
 
 function untar() {
-    tar -zf $1 -C $2
+    tar -xf $1 -C $2
 }
 
 function BUILD(){
-    command_string=$1
+    local step_two=0
+    local command_string=$1
     #check if the command string have a step or not
     if [[ $command_string==*"_2"* ]]; then
-        step_two=1
-        command_string=${command_string%"_2"}
+        local step_two=1
+        local command_string=${command_string%"_2"}
     else
-        step_two=0
+        local step_two=0
     fi
     # check if exist in source folder the tar file
-    filename=check_is_tar $command_string
+    local filename=check_is_tar $command_string
 
     # untar into sources
     if $filename
@@ -106,5 +100,24 @@ function BUILD(){
         fi
     popd
 }
+
+#generate the folders
+mkdir /mnt/lfs
+export LFS=/mnt/lfs
+mkdir $LFS/sources
+chmod a+wt $LFS/sources
+
+# set folder tools
+mkdir -v $LFS/tools
+ln -sv $LFS/tools /
+
+# set variables to export
+LC_ALL=POSIX
+LFS_TGT=$(uname -m)-lfs-linux-gnu
+PATH=/tools/bin:/bin:/usr/bin
+MAKEFLAGS='-j 4'
+export LC_ALL LFS_TGT PATH MAKEFLAGS
+
+DOWNLOAD "$LFS"/sources
 
 BUILD binutils
