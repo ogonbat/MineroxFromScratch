@@ -95,6 +95,13 @@ function BUILD(){
     pushd $LFS/sources/$directory
         #copy the installer intpo the directory
         cp ./scripts/"$command_string" $LFS/sources/$directory
-
+        source $command_string
+        if [$step_two]; then
+            toolchain_step_two
+        else
+            toolchain
+        fi
     popd
 }
+
+BUILD binutils
