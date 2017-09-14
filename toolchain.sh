@@ -80,13 +80,13 @@ function BUILD(){
     # untar into sources
     if [ -f $filename ]; then
         # the file exist so untar it
-        UNTAR $LFS/sources/$filename $LFS/sources
+        UNTAR $filename $LFS/sources
         #get the only existent directory in source
         local directory=$( GETDIR )
-        cp ./scripts/$command_string $LFS/sources/$directory
+        cp ./scripts/$command_string $directory
         # move to the directory correspondant
         if [ $directory ]; then
-            pushd $LFS/sources/$directory
+            pushd $directory
                 #copy the installer into the directory
                 source $command_string
                 if [$step_two]; then
