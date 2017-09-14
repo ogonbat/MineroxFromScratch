@@ -73,12 +73,13 @@ function untar() {
 }
 
 function BUILD(){
-    step_two=0
     command_string=$1
     #check if the command string have a step or not
     if [[ $command_string==*"_2"* ]]; then
-        $step_two=1
+        step_two=1
         command_string=${command_string%"_2"}
+    else
+        step_two=0
     fi
     # check if exist in source folder the tar file
     filename=check_is_tar $command_string
