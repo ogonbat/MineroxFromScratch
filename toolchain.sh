@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 function ctrl_c() {
+    # remove folder
+    rm -Rf /mnt
+    rm -Rf /tools
     echo "** Trapped CTRL-C"
 }
 trap ctrl_c INT
