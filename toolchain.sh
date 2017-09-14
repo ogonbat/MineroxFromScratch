@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
+function ctrl_c() {
+    echo "** Trapped CTRL-C"
+}
+trap ctrl_c INT
 
+error() {
+  local parent_lineno="$1"
+  local message="$2"
+  local code="${3:-1}"
+  if [[ -n "$message" ]] ; then
+    echo "Error on or near line ${parent_lineno}: ${message}; exiting with status ${code}"
+  else
+    echo "Error on or near line ${parent_lineno}; exiting with status ${code}"
+  fi
+  exit "${code}"
+}
+trap 'error ${LINENO}' ERR
 
 #generate the folders
 mkdir /mnt
@@ -55,8 +71,15 @@ function untar() {
 }
 
 function BUILD(){
-    # check if exist in a folder
-    filename=check_is_tar $1
+    step_two = 0
+    command_string = $1
+    #check if the command string have a step or not
+    if [[ $command_string==*"_2"* ]]; then
+        $step_two = 1
+        command_string=${command_string%"_2"}
+    fi
+    # check if exist in source folder the tar file
+    filename=check_is_tar $command_string
 
     # untar into sources
     if $filename
@@ -65,10 +88,14 @@ function BUILD(){
         untar $LFS/sources/$filename $LFS/sources
     fi
 
+    #get the only existent directory in source
     directory=get_directory
 
     # move to the directory correspondant
-    pushd $LFS/sources/directory
+    pushd $LFS/sources/$directory
+        #copy the installer intpo the directory
+        cp ./scripts/"$command_string" $LFS/sources/$directory
+
     popd
 
 }
