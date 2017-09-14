@@ -43,7 +43,7 @@ function DOWNLOAD() {
 
 }
 function check_is_tar() {
-    for entry in "$LFS"/sources/"$1"*
+    for entry in "$LFS"/sources/"$1"*.tar.*
     do
         return $entry
     done
@@ -60,6 +60,7 @@ function get_directory() {
             return $entry
         fi
     done
+    return 0
 }
 
 function untar() {
@@ -69,6 +70,9 @@ function untar() {
 function BUILD(){
     local step_two=0
     local command_string=$1
+
+    echo $command_string
+
     #check if the command string have a step or not
     if [[ $command_string==*"_2"* ]]; then
         local step_two=1
@@ -90,15 +94,17 @@ function BUILD(){
     directory=get_directory
     cp ./scripts/"$command_string" "$LFS"/sources/"$directory"
     # move to the directory correspondant
-    pushd "$LFS"/sources/"$directory"
-        #copy the installer into the directory
-        source "$command_string"
-        if [$step_two]; then
-            toolchain_step_two
-        else
-            toolchain
-        fi
-    popd
+    if [ $directory ]; then
+        pushd "$LFS"/sources/"$directory"
+            #copy the installer into the directory
+            source "$command_string"
+            if [$step_two]; then
+                toolchain_step_two
+            else
+                toolchain
+            fi
+        popd
+    fi
 }
 
 #generate the folders
