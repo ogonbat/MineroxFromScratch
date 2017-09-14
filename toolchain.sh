@@ -56,6 +56,7 @@ function get_directory() {
     do
         if [ -d "$entry" ]
         then
+            echo "$entry"
             return $entry
         fi
     done
@@ -87,12 +88,11 @@ function BUILD(){
 
     #get the only existent directory in source
     directory=get_directory
-
+    cp ./scripts/"$command_string" "$LFS"/sources/"$directory"
     # move to the directory correspondant
-    pushd $LFS/sources/$directory
-        #copy the installer intpo the directory
-        cp ./scripts/"$command_string" $LFS/sources/$directory
-        source $command_string
+    pushd "$LFS"/sources/"$directory"
+        #copy the installer into the directory
+        source "$command_string"
         if [$step_two]; then
             toolchain_step_two
         else
