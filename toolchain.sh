@@ -45,7 +45,6 @@ function DOWNLOAD() {
 function CHECKTAR() {
     for entry in "$LFS"/sources/"$1"*.tar.*; do
         echo $entry
-        return $entry
     done
     return 0
 }
@@ -53,10 +52,8 @@ function CHECKTAR() {
 function GETDIR() {
 
     for entry in $LFS/sources/*; do
-        if [ -d "$entry" ]
-        then
+        if [ -d "$entry" ]; then
             echo $entry
-            return $entry
         fi
     done
     return 0
