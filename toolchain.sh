@@ -78,26 +78,29 @@ function BUILD(){
     local filename=$( CHECKTAR $command_string )
 
     # untar into sources
-    if [$filename]; then
+    if [-f $filename]; then
         # the file exist so untar it
         UNTAR $LFS/sources/$filename $LFS/sources
+        #get the only existent directory in source
+        local directory=$( GETDIR )
+        cp ./scripts/$command_string $LFS/sources/$directory
+        # move to the directory correspondant
+        if [ $directory ]; then
+            pushd $LFS/sources/$directory
+                #copy the installer into the directory
+                source $command_string
+                if [$step_two]; then
+                    toolchain_step_two
+                else
+                    toolchain
+                fi
+            popd
+        fi
+    else
+        exit 0
     fi
 
-    #get the only existent directory in source
-    local directory=$( GETDIR )
-    cp ./scripts/$command_string $LFS/sources/$directory
-    # move to the directory correspondant
-    if [ $directory ]; then
-        pushd $LFS/sources/$directory
-            #copy the installer into the directory
-            source $command_string
-            if [$step_two]; then
-                toolchain_step_two
-            else
-                toolchain
-            fi
-        popd
-    fi
+
 }
 
 #generate the folders
