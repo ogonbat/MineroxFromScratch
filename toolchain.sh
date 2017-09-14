@@ -42,21 +42,20 @@ function DOWNLOAD() {
     fi
 
 }
-function check_is_tar() {
-    for entry in "$LFS"/sources/"$1"*.tar.*
-    do
+function CHECKTAR() {
+    for entry in "$LFS"/sources/"$1"*.tar.*; do
+        echo $entry
         return $entry
     done
     return 0
 }
 
-function get_directory() {
+function GETDIR() {
 
-    for entry in "$LFS"/sources
-    do
+    for entry in $LFS/sources/*; do
         if [ -d "$entry" ]
         then
-            echo "$entry"
+            echo $entry
             return $entry
         fi
     done
@@ -71,8 +70,6 @@ function BUILD(){
     local step_two=0
     local command_string=$1
 
-    echo $command_string
-
     #check if the command string have a step or not
     if [[ $command_string==*"_2"* ]]; then
         local step_two=1
@@ -81,23 +78,22 @@ function BUILD(){
         local step_two=0
     fi
     # check if exist in source folder the tar file
-    local filename=check_is_tar $command_string
+    local filename=CHECKTAR $command_string
 
     # untar into sources
-    if $filename
-    then
+    if [$filename]; then
         # the file exist so untar it
         untar $LFS/sources/$filename $LFS/sources
     fi
 
     #get the only existent directory in source
-    directory=get_directory
-    cp ./scripts/"$command_string" "$LFS"/sources/"$directory"
+    directory=GETDIR
+    cp ./scripts/$command_string $LFS/sources/$directory
     # move to the directory correspondant
     if [ $directory ]; then
-        pushd "$LFS"/sources/"$directory"
+        pushd $LFS/sources/$directory
             #copy the installer into the directory
-            source "$command_string"
+            source $command_string
             if [$step_two]; then
                 toolchain_step_two
             else
