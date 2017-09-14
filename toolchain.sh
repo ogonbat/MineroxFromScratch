@@ -97,5 +97,4 @@ function BUILD(){
         cp ./scripts/"$command_string" $LFS/sources/$directory
 
     popd
-
 }
