@@ -62,7 +62,7 @@ function GETDIR() {
     return 0
 }
 
-function untar() {
+function UNTAR() {
     tar -xf $1 -C $2
 }
 
@@ -78,16 +78,16 @@ function BUILD(){
         local step_two=0
     fi
     # check if exist in source folder the tar file
-    local filename=CHECKTAR $command_string
+    local filename=$( CHECKTAR $command_string )
 
     # untar into sources
     if [$filename]; then
         # the file exist so untar it
-        untar $LFS/sources/$filename $LFS/sources
+        UNTAR $LFS/sources/$filename $LFS/sources
     fi
 
     #get the only existent directory in source
-    directory=GETDIR
+    local directory=$( GETDIR )
     cp ./scripts/$command_string $LFS/sources/$directory
     # move to the directory correspondant
     if [ $directory ]; then
