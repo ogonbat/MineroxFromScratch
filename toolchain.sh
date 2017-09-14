@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 function ctrl_c() {
     # remove folder
-    rm -Rf /mnt
+    rm -Rf /mnt/lfs
     rm -Rf /tools
     echo "** Trapped CTRL-C"
 }
@@ -21,7 +21,6 @@ error() {
 trap 'error ${LINENO}' ERR
 
 #generate the folders
-mkdir /mnt
 mkdir /mnt/lfs
 export LFS=/mnt/lfs
 mkdir -v $LFS/sources
