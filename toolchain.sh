@@ -31,7 +31,7 @@ function DOWNLOAD() {
     fi
     #check if is empty
     if [ "$(ls -A $temporary_folder)" ]; then
-        return 0
+        cp "$temporary_folder"/* "$1"
     else
         # download all the files
         wget --input-file=wget-list --continue --directory-prefix="$temporary_folder"
