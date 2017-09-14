@@ -83,7 +83,7 @@ function BUILD(){
         UNTAR $filename $LFS/sources
         #get the only existent directory in source
         local directory=$( GETDIR )
-        cp ./scripts/$command_string $directory
+        cp ./scripts/"$command_string".sh $directory
         # move to the directory correspondant
         if [ $directory ]; then
             pushd $directory
