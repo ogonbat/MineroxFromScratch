@@ -74,8 +74,14 @@ function BUILD(){
     else
         local step_two=0
     fi
-    # check if exist in source folder the tar file
-    local filename=$( CHECKTAR $command_string )
+    if [ $2 ]; then
+        # the command correspond a package different to the command executer
+        local filename=$( CHECKTAR $2 )
+    else
+        # check if exist in source folder the tar file
+        local filename=$( CHECKTAR $command_string )
+    fi
+
 
     # untar into sources
     if [ -f $filename ]; then
@@ -95,12 +101,11 @@ function BUILD(){
                     toolchain
                 fi
             popd
+            rm -Rf $directory
         fi
     else
         exit 0
     fi
-
-
 }
 
 #generate the folders
@@ -123,3 +128,52 @@ export LC_ALL LFS_TGT PATH MAKEFLAGS
 DOWNLOAD "$LFS"/sources
 
 BUILD binutils
+BUILD gcc
+BUILD linux
+BUILD glibc
+BUILD libstdc gcc
+BUILD binutils_2
+BUILD gcc_2
+BUILD tcl
+BUILD expect
+BUILD dejagnu
+BUILD check
+BUILD ncurses
+BUILD bash
+BUILD bison
+BUILD bzip
+BUILD coreutils
+BUILD diffutils
+BUILD file
+BUILD findutils
+BUILD gawk
+BUILD gettext
+BUILD grep
+BUILD gzip
+BUILD m4
+BUILD make
+BUILD patch
+BUILD perl
+BUILD sed
+BUILD tar
+BUILD texinfo
+BUILD util-linux
+BUILD xz
+
+rm -rf /tools/{,share}/{info,man,doc}
+
+mkdir -pv $LFS/{dev,proc,sys,run}
+
+mknod -m 600 $LFS/dev/console c 5 1
+mknod -m 666 $LFS/dev/null c 1 3
+
+mount -v --bind /dev $LFS/dev
+
+mount -vt devpts devpts $LFS/dev/pts -o gid=5,mode=620
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+mount -vt tmpfs tmpfs $LFS/run
+
+if [ -h $LFS/dev/shm ]; then
+  mkdir -pv $LFS/$(readlink $LFS/dev/shm)
+fi

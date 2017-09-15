@@ -1,0 +1,6 @@
+function toolchain(){
+    ./configure --prefix=/tools --without-bash-malloc
+    make
+    make install
+    ln -sv bash /tools/bin/sh
+}
