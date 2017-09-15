@@ -36,6 +36,7 @@ function DOWNLOAD() {
         # download all the files
         wget --input-file=wget-list --continue --directory-prefix="$temporary_folder"
         cp "$temporary_folder"/* "$1"
+        cp md5sums "$1"
         pushd "$1"
             md5sum -c md5sums
         popd
@@ -122,7 +123,7 @@ ln -sv $LFS/tools /
 # set variables to export
 LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
-PATH=/tools/bin:$PATH
+PATH=/tools/bin:/bin:/usr/bin
 MAKEFLAGS='-j 4'
 export LC_ALL LFS_TGT PATH MAKEFLAGS
 
