@@ -1,4 +1,4 @@
-FROM vbatts/slackwar:current
+FROM vbatts/slackware:current
 
 MAINTAINER cingusoft@gmail.com
 
