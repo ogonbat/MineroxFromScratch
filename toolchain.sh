@@ -121,7 +121,7 @@ ln -sv $LFS/tools /
 # set variables to export
 LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
-PATH=/tools/bin:/bin:/usr/bin
+PATH=/tools/bin:$PATH
 MAKEFLAGS='-j 4'
 export LC_ALL LFS_TGT PATH MAKEFLAGS
 
