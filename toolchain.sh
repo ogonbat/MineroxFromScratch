@@ -96,12 +96,13 @@ function BUILD(){
                 #copy the installer into the directory
                 source "$command_string".sh
                 if [ $step_two ]; then
-                    toolchain_step_two
+                    toolchain_step_two >> /tmp/toolchain.log
                 else
-                    toolchain
+                    toolchain >> /tmp/toolchain.log
                 fi
             popd
             rm -Rf $directory
+
         fi
     else
         exit 0
@@ -177,3 +178,5 @@ mount -vt tmpfs tmpfs $LFS/run
 if [ -h $LFS/dev/shm ]; then
   mkdir -pv $LFS/$(readlink $LFS/dev/shm)
 fi
+
+rm /tmp/toolchain.log
