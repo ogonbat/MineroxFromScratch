@@ -95,7 +95,7 @@ function BUILD(){
             pushd $directory
                 #copy the installer into the directory
                 source "$command_string".sh
-                if [$step_two]; then
+                if [ $step_two ]; then
                     toolchain_step_two
                 else
                     toolchain
