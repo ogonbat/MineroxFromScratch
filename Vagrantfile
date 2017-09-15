@@ -51,11 +51,11 @@ Vagrant.configure("2") do |config|
   #
   config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+      #vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
       vb.memory = "3072"
-  # end
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -63,8 +63,14 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+
+
+  config.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y build-essential bison gawk texinfo libgmp-dev libmpfr-dev libmpc-dev wget python3-pip libisl-dev libisl15 module-assistant
+      ln -fsv /bin/bash /bin/sh
+      chmod -R 777 /vagrant
+      cd /vagrant
+      ./toolchain.sh
+  SHELL
 end
