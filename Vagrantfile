@@ -49,6 +49,7 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
+
   config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       #vb.gui = true
@@ -70,7 +71,5 @@ Vagrant.configure("2") do |config|
       apt-get install -y build-essential bison gawk texinfo libgmp-dev libmpfr-dev libmpc-dev wget python3-pip libisl-dev libisl15 module-assistant
       ln -fsv /bin/bash /bin/sh
       chmod -R 777 /vagrant
-      cd /vagrant
-      ./toolchain.sh
   SHELL
 end
