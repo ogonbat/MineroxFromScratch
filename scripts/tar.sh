@@ -1,5 +1,5 @@
 function toolchain(){
-    ./configure --prefix=/tools
-    make
+    FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/tools
+    FORCE_UNSAFE_CONFIGURE=1 make
     make install
 }
