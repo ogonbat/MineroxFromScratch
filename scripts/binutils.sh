@@ -38,3 +38,19 @@ function toolchain_step_two(){
     cp -v ld/ld-new /tools/bin
 
 }
+
+function basesystem(){
+    expect -c "spawn ls"
+    spawn ls
+    mkdir -v build
+    cd       build
+    ../configure --prefix=/usr       \
+             --enable-gold       \
+             --enable-ld=default \
+             --enable-plugins    \
+             --enable-shared     \
+             --disable-werror    \
+             --with-system-zlib
+    make tooldir=/usr
+    make tooldir=/usr install
+}
