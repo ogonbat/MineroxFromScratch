@@ -150,7 +150,65 @@ grep found dummy.log
 rm -v dummy.c a.out dummy.log
 
 BUILD zlib
-
+BUILD file
+BUILD readline
+BUILD m4
+BUILD bc
+BUILD binutils
+BUILD gmp
+BUILD mpfr
+BUILD mpc
+BUILD gcc
+BUILD bzip
+BUILD pkg-config
+BUILD ncurses
+BUILD attr
+BUILD acl
+BUILD libcap
+BUILD sed
+BUILD shadow
+BUILD psmisc
+BUILD iana-etc
+BUILD bison
+BUILD flex
+BUILD grep
+BUILD bash
+BUILD libtool
+BUILD gdbm
+BUILD gperf
+BUILD expat
+BUILD inetutils
+BUILD perl
+BUILD XML-Parser
+BUILD intltool
+BUILD autoconf
+BUILD automake
+BUILD xz
+BUILD kmod
+BUILD gettext
+BUILD procps
+BUILD e2fsprogs
+BUILD coreutils
+BUILD diffutils
+BUILD gawk
+BUILD findutils
+BUILD groff
+BUILD grub
+BUILD less
+BUILD gzip
+BUILD iproute
+BUILD kbd
+BUILD libpipeline
+BUILD make
+BUILD patch
+BUILD sysklogd
+BUILD sysvinit
+BUILD eudev
+BUILD util-linux
+BUILD man-db
+BUILD tar
+BUILD texinfo
+BUILD vim
 
 save_lib="ld-2.26.so libc-2.26.so libpthread-2.26.so libthread_db-1.0.so"
 
