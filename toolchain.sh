@@ -22,6 +22,7 @@ error() {
   exit "${code}"
 }
 trap 'error ${LINENO}' ERR
+DBGOUT="/dev/stderr"
 
 function DOWNLOAD() {
     # check if the base folder source exist
@@ -34,11 +35,11 @@ function DOWNLOAD() {
         cp "$temporary_folder"/* "$1"
     else
         # download all the files
-        wget --input-file=wget-list --continue --directory-prefix="$temporary_folder"
+        wget --input-file=wget-list --continue --directory-prefix="$temporary_folder" 2> $(DBGOUT)
         cp "$temporary_folder"/* "$1"
         cp md5sums "$1"
         pushd "$1"
-            md5sum -c md5sums
+            md5sum -c md5sums 2> $(DBGOUT)
         popd
     fi
 
@@ -100,9 +101,9 @@ function BUILD(){
                 if [[ $step_two == 0 ]]
                 then
                     echo "paso dos"
-                    toolchain_step_two
+                    toolchain_step_two 2> $(DBGOUT)
                 else
-                    toolchain
+                    toolchain 2> $(DBGOUT)
                 fi
             popd
             rm -Rf $directory
